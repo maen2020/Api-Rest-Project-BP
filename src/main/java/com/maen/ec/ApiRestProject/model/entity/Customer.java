@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.Date;
 
 //Esta clase hace referencia a una entidad o tabla de la base de datos.
@@ -15,7 +16,7 @@ import java.util.Date;
 @ToString //Devuelve una representación en cadena de texto del objeto sobre el cual se invoque.
 @Entity //Definir la clase como entidad.
 @Table(name = "customers") //Hace referencia hacia la tabla de la base de datos.
-public class Customer {
+public class Customer implements Serializable {
 
     //Atributos.
     @Id
