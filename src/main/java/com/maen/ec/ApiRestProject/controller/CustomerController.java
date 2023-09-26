@@ -3,15 +3,12 @@ package com.maen.ec.ApiRestProject.controller;
 import com.maen.ec.ApiRestProject.model.dto.CustomerDto;
 import com.maen.ec.ApiRestProject.model.entity.Customer;
 import com.maen.ec.ApiRestProject.model.payload.MessageResponse;
-import com.maen.ec.ApiRestProject.service.ICustomer;
+import com.maen.ec.ApiRestProject.service.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController //Indica que esta clase es un controlador.
 @RequestMapping("/api/v1") //Especifica que este controlador va hacer un recurso y va a consumido por peticiones.
@@ -19,11 +16,11 @@ public class CustomerController {
 
     //Llamar al servicio que tiene la logica de negocio.
     @Autowired
-    private ICustomer customerService;
+    private ICustomerService customerService;
 
     @PostMapping("/customers")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> create(@RequestBody CustomerDto customerDto){
+    public ResponseEntity<?> create(@RequestBody CustomerDto customerDto) {
         Customer customerSave = null;
         try {
             customerSave = customerService.save(customerDto);
@@ -37,8 +34,8 @@ public class CustomerController {
                             .registrationDate(customerSave.getRegistrationDate())
                             .build())
                     .build()
-                    ,HttpStatus.CREATED);
-        } catch (DataAccessException ex){
+                    , HttpStatus.CREATED);
+        } catch (DataAccessException ex) {
             return new ResponseEntity<>(
                     MessageResponse.builder()
                             .message(ex.getMessage())
@@ -48,31 +45,37 @@ public class CustomerController {
         }
     }
 
-    @PutMapping("/customers")
+    @PutMapping("/customers/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> update(@RequestBody CustomerDto customerDto){
+    public ResponseEntity<?> update(@RequestBody CustomerDto customerDto, @PathVariable Long id) {
         Customer customerUpdate = null;
         try {
-            customerUpdate = customerService.save(customerDto);
-            return new ResponseEntity<>(MessageResponse.builder()
-                    .message("Registration correctly updated.")
-                    .object(CustomerDto.builder()
-                            .idCustomer(customerUpdate.getIdCustomer())
-                            .name(customerUpdate.getName())
-                            .lastname(customerUpdate.getLastname())
-                            .email(customerUpdate.getEmail())
-                            .registrationDate(customerUpdate.getRegistrationDate())
-                            .build())
-                    .build()
-                    ,HttpStatus.CREATED);
-        } catch (DataAccessException ex){
-            return new ResponseEntity<>(
-                    MessageResponse.builder()
-                            .message(ex.getMessage())
-                            .object(null)
-                            .build()
-                    , HttpStatus.METHOD_NOT_ALLOWED);
+            if (customerService.existsById(id)) {
+                customerDto.setIdCustomer(id);
+                customerUpdate = customerService.save(customerDto);
+                return new ResponseEntity<>(MessageResponse.builder()
+                        .message("Registration correctly updated.")
+                        .object(CustomerDto.builder()
+                                .idCustomer(customerUpdate.getIdCustomer())
+                                .name(customerUpdate.getName())
+                                .lastname(customerUpdate.getLastname())
+                                .email(customerUpdate.getEmail())
+                                .registrationDate(customerUpdate.getRegistrationDate())
+                                .build())
+                        .build()
+                        , HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>(
+                        MessageResponse.builder()
+                                .message("Record not found.")
+                                .object(null)
+                                .build()
+                        , HttpStatus.NOT_FOUND);
+            }
+        } catch (DataAccessException ex) {
+
         }
+        return null;
     }
 
     @DeleteMapping("/customers/{id}")

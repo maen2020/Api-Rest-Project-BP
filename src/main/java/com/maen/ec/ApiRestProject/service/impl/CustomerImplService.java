@@ -3,7 +3,7 @@ package com.maen.ec.ApiRestProject.service.impl;
 import com.maen.ec.ApiRestProject.model.dao.CustomerDAO;
 import com.maen.ec.ApiRestProject.model.dto.CustomerDto;
 import com.maen.ec.ApiRestProject.model.entity.Customer;
-import com.maen.ec.ApiRestProject.service.ICustomer;
+import com.maen.ec.ApiRestProject.service.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
  * la informacion se procesa y se manda al ICustomerDAO.
  */
 @Service //Indicar que la clase va a trabajar como servicio dentro de la logica de negocio.
-public class CustomerImpl implements ICustomer {
+public class CustomerImplService implements ICustomerService {
 
     //Instaciar e inyeccion del ICustomerDAO.
     @Autowired
@@ -44,5 +44,10 @@ public class CustomerImpl implements ICustomer {
     @Override
     public void delete(Customer customer) {
         customerDAO.delete(customer);
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return customerDAO.existsById(id);
     }
 }
