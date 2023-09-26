@@ -1,6 +1,7 @@
 package com.maen.ec.ApiRestProject.service.impl;
 
 import com.maen.ec.ApiRestProject.model.dao.CustomerDAO;
+import com.maen.ec.ApiRestProject.model.dto.CustomerDto;
 import com.maen.ec.ApiRestProject.model.entity.Customer;
 import com.maen.ec.ApiRestProject.service.ICustomer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,14 @@ public class CustomerImpl implements ICustomer {
     private CustomerDAO customerDAO;
     @Transactional
     @Override
-    public Customer save(Customer customer) {
+    public Customer save(CustomerDto customerDto) {
+        Customer customer = Customer.builder()
+                .idCustomer(customerDto.getIdCustomer())
+                .name(customerDto.getName())
+                .lastname(customerDto.getLastname())
+                .email(customerDto.getEmail())
+                .registrationDate(customerDto.getRegistrationDate())
+                .build();
         return customerDAO.save(customer);
     }
 

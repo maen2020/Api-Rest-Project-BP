@@ -1,5 +1,6 @@
 package com.maen.ec.ApiRestProject.controller;
 
+import com.maen.ec.ApiRestProject.model.dto.CustomerDto;
 import com.maen.ec.ApiRestProject.model.entity.Customer;
 import com.maen.ec.ApiRestProject.service.ICustomer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +22,28 @@ public class CustomerController {
 
     @PostMapping("/customers")
     @ResponseStatus(HttpStatus.CREATED)
-    public Customer create(@RequestBody Customer customer){
-        return customerService.save(customer);
+    public CustomerDto create(@RequestBody CustomerDto customerDto){
+        Customer customerSave = customerService.save(customerDto);
+        return CustomerDto.builder()
+                .idCustomer(customerSave.getIdCustomer())
+                .name(customerSave.getName())
+                .lastname(customerSave.getLastname())
+                .email(customerSave.getEmail())
+                .registrationDate(customerSave.getRegistrationDate())
+                .build();
     }
 
     @PutMapping("/customers")
     @ResponseStatus(HttpStatus.CREATED)
-    public Customer update(@RequestBody Customer customer){
-        return customerService.save(customer);
+    public CustomerDto update(@RequestBody CustomerDto customerDto){
+        Customer customerUpdate = customerService.save(customerDto);
+        return CustomerDto.builder()
+                .idCustomer(customerUpdate.getIdCustomer())
+                .name(customerUpdate.getName())
+                .lastname(customerUpdate.getLastname())
+                .email(customerUpdate.getEmail())
+                .registrationDate(customerUpdate.getRegistrationDate())
+                .build();
     }
 
     @DeleteMapping("/customers/{id}")
@@ -43,12 +58,18 @@ public class CustomerController {
             response.put("Customer: ", null);
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
 
     @GetMapping("/customers/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Customer showById(@PathVariable Long id){
-        return  customerService.findById(id);
+    public CustomerDto showById(@PathVariable Long id){
+        Customer customer = customerService.findById(id);
+        return CustomerDto.builder()
+                .idCustomer(customer.getIdCustomer())
+                .name(customer.getName())
+                .lastname(customer.getLastname())
+                .email(customer.getEmail())
+                .registrationDate(customer.getRegistrationDate())
+                .build();
     }
 }
