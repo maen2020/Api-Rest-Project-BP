@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 //Dentro de esta clase se tiene que mandar a llamar(implements) a la interfaz ICustomer para hacer uso
 //de esos metodos.
 
@@ -21,6 +23,12 @@ public class CustomerImplService implements ICustomerService {
     //Instaciar e inyeccion del ICustomerDAO.
     @Autowired
     private CustomerDAO customerDAO;
+
+    @Override
+    public List<Customer> getAll() {
+        return (List) customerDAO.findAll();
+    }
+
     @Transactional
     @Override
     public Customer save(CustomerDto customerDto) {
