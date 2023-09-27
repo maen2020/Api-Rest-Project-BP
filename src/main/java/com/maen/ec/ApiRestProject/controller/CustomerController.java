@@ -1,5 +1,6 @@
 package com.maen.ec.ApiRestProject.controller;
 
+import com.maen.ec.ApiRestProject.exception.ResourceNotFoundException;
 import com.maen.ec.ApiRestProject.model.dto.CustomerDto;
 import com.maen.ec.ApiRestProject.model.entity.Customer;
 import com.maen.ec.ApiRestProject.model.payload.MessageResponse;
@@ -24,12 +25,7 @@ public class CustomerController {
     public ResponseEntity<?> getAll(){
         List<Customer> getList = customerService.getAll();
         if (getList.isEmpty()){
-            return new ResponseEntity<>(
-                    MessageResponse.builder()
-                            .message("No data available.")
-                            .object(null)
-                            .build()
-                    ,HttpStatus.OK);
+            throw new ResourceNotFoundException("customers");
         }
         return new ResponseEntity<>(
                 MessageResponse.builder()
@@ -124,12 +120,7 @@ public class CustomerController {
     public ResponseEntity<?> showById(@PathVariable Long id){
         Customer customer = customerService.findById(id);
         if (customer == null){
-            return new ResponseEntity<>(
-                    MessageResponse.builder()
-                            .message("The registry does not exist.")
-                            .object(null)
-                            .build()
-                    ,HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException("customer", "id", id);
         }
         return new ResponseEntity<>(
                 MessageResponse.builder()
