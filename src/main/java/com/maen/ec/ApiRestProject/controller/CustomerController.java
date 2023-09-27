@@ -120,7 +120,7 @@ public class CustomerController {
     public ResponseEntity<?> showById(@PathVariable Long id){
         Customer customer = customerService.findById(id);
         if (customer == null){
-            throw new ResourceNotFoundException("customer", "id", id);
+            throw new ResourceNotFoundException("Customer", "id", id);
         }
         return new ResponseEntity<>(
                 MessageResponse.builder()
