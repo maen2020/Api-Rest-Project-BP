@@ -1,5 +1,6 @@
 package com.maen.ec.ApiRestProject.controller;
 
+import com.maen.ec.ApiRestProject.exception.BadRequestException;
 import com.maen.ec.ApiRestProject.exception.ResourceNotFoundException;
 import com.maen.ec.ApiRestProject.model.dto.CustomerDto;
 import com.maen.ec.ApiRestProject.model.entity.Customer;
@@ -54,12 +55,7 @@ public class CustomerController {
                     .build()
                     , HttpStatus.CREATED);
         } catch (DataAccessException ex) {
-            return new ResponseEntity<>(
-                    MessageResponse.builder()
-                            .message(ex.getMessage())
-                            .object(null)
-                            .build()
-                    , HttpStatus.METHOD_NOT_ALLOWED);
+            throw new BadRequestException(ex.getMessage());
         }
     }
 
@@ -86,12 +82,7 @@ public class CustomerController {
                 throw new ResourceNotFoundException("Customer", "id", id);
             }
         } catch (DataAccessException ex) {
-            return new ResponseEntity<>(
-                    MessageResponse.builder()
-                            .message(ex.getMessage())
-                            .object(null)
-                            .build()
-                    , HttpStatus.METHOD_NOT_ALLOWED);
+            throw new BadRequestException(ex.getMessage());
         }
     }
 
@@ -103,12 +94,7 @@ public class CustomerController {
             customerService.delete(customerDelete);
             return new ResponseEntity<>(customerDelete, HttpStatus.NO_CONTENT);
         } catch (DataAccessException ex){
-            return new ResponseEntity<>(
-                    MessageResponse.builder()
-                            .message(ex.getMessage())
-                            .object(null)
-                            .build()
-                    ,HttpStatus.METHOD_NOT_ALLOWED);
+            throw new BadRequestException(ex.getMessage());
         }
     }
 
