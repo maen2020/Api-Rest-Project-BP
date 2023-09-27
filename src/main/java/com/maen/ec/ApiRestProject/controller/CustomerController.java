@@ -5,6 +5,7 @@ import com.maen.ec.ApiRestProject.model.dto.CustomerDto;
 import com.maen.ec.ApiRestProject.model.entity.Customer;
 import com.maen.ec.ApiRestProject.model.payload.MessageResponse;
 import com.maen.ec.ApiRestProject.service.ICustomerService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -37,7 +38,7 @@ public class CustomerController {
 
     @PostMapping("/customer")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> create(@RequestBody CustomerDto customerDto) {
+    public ResponseEntity<?> create(@RequestBody @Valid CustomerDto customerDto) {
         Customer customerSave = null;
         try {
             customerSave = customerService.save(customerDto);
@@ -64,7 +65,7 @@ public class CustomerController {
 
     @PutMapping("/customer/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> update(@RequestBody CustomerDto customerDto, @PathVariable Long id) {
+    public ResponseEntity<?> update(@RequestBody @Valid CustomerDto customerDto, @PathVariable Long id) {
         Customer customerUpdate = null;
         try {
             if (customerService.existsById(id)) {
@@ -82,12 +83,7 @@ public class CustomerController {
                         .build()
                         , HttpStatus.CREATED);
             } else {
-                return new ResponseEntity<>(
-                        MessageResponse.builder()
-                                .message("Record not found.")
-                                .object(null)
-                                .build()
-                        , HttpStatus.NOT_FOUND);
+                throw new ResourceNotFoundException("Customer", "id", id);
             }
         } catch (DataAccessException ex) {
             return new ResponseEntity<>(

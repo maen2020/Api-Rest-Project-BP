@@ -1,6 +1,9 @@
 package com.maen.ec.ApiRestProject.model.dto;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.io.Serializable;
@@ -14,8 +17,15 @@ public class CustomerDto implements Serializable {
 
     //Atributos.
     private Long idCustomer;
+
+    @Size(min = 2, max = 25)
+    @NotEmpty(message = "Name required!!")
     private String name;
+    @NotEmpty(message = "Lastname required!")
+    @Size(min = 2, max = 25)
     private String lastname;
+    @Email
+    @NotEmpty(message = "Email required!")
     private String email;
     private Date registrationDate;
 }
