@@ -39,4 +39,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ApiResponse> handlerBadRequestException(BadRequestException exception,
+                                                                WebRequest webRequest){
+        ApiResponse apiResponse = new ApiResponse(exception.getMessage(), webRequest.getDescription(false));
+        return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+    }
+
 }
