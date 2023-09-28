@@ -1,0 +1,22 @@
+server:
+    port: 8091
+spring:
+    config:
+        activate:
+            on-profile: prod
+    datasource:
+        driver-class-name: org.postgresql.Driver
+        password: maen
+        url: jdbc:postgresql://localhost:5432/db_springboot_prod
+        username: postgres
+    jpa:
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        hibernate:
+            ddl-auto: update
+        show-sql: true
+    output:
+        ansi:
+            enabled: always
+springdoc:
+    swagger-ui:
+        path: /swagger-iu-custom.html
